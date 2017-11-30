@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import static org.assertj.core.util.Lists.newArrayList;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
@@ -24,7 +25,7 @@ public class ApplicationTest {
         webClient.get().uri("/anonymous").accept(APPLICATION_JSON_UTF8)
                 .exchange()
                 .expectStatus().is2xxSuccessful()
-                .expectBody().jsonPath("$.authorities[0].authority").isEqualTo("ROLE_ANONYMOUS");
+                .expectBody().jsonPath("$.authorities..authority").isEqualTo("ROLE_ANONYMOUS");
     }
 
     @Test
@@ -32,7 +33,7 @@ public class ApplicationTest {
         webClient.get().uri("/anonymous").accept(APPLICATION_JSON_UTF8).header(AUTHORIZATION, "user")
                 .exchange()
                 .expectStatus().is2xxSuccessful()
-                .expectBody().jsonPath("$.authorities[0].authority").isEqualTo("ROLE_USER");
+                .expectBody().jsonPath("$.authorities..authority").isEqualTo(newArrayList("ROLE_USER", "ROLE_ANONYMOUS"));
     }
 
     @Test
@@ -40,7 +41,7 @@ public class ApplicationTest {
         webClient.get().uri("/user").accept(APPLICATION_JSON_UTF8).header(AUTHORIZATION, "user")
                 .exchange()
                 .expectStatus().is2xxSuccessful()
-                .expectBody().jsonPath("$.authorities[0].authority").isEqualTo("ROLE_USER");
+                .expectBody().jsonPath("$.authorities..authority").isEqualTo(newArrayList("ROLE_USER", "ROLE_ANONYMOUS"));
     }
 
     @Test
