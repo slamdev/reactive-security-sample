@@ -1,0 +1,30 @@
+buildscript {
+    repositories {
+        maven { url 'https://repo.spring.io/libs-milestone' }
+    }
+    dependencies {
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.M7'
+        classpath 'io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE'
+    }
+}
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'java'
+
+group 'com.github.slamdev'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    maven { url 'https://repo.spring.io/libs-milestone' }
+    jcenter()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-webflux'
+    compile 'org.springframework.boot:spring-boot-starter-security'
+    compileOnly 'org.projectlombok:lombok'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
